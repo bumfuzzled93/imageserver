@@ -1,5 +1,6 @@
 package com.printx.imageserver;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 @Service
 public class ImageService {
 
-    private static String photofolder = "C:\\images";
+    private static String photofolder = "C:\\images\\";
     public List<Image> getImages(){
         List<Image> images = new ArrayList<>();
         try (Stream<Path> walk = Files.walk(Paths.get(photofolder))) {
@@ -29,6 +30,19 @@ public class ImageService {
         }
 
         return images;
+    }
+
+    public List<Image> getImages(long timestamp){
+        File dir = new File(photofolder);
+        File[] files = dir.listFiles();
+        List<Image> latestImages = new ArrayList<>();
+
+        for (int i=0;i < files.length;i++){
+            if(files[i].lastModified() > timestamp){
+                latestImages.add(new Image(String.format("http://localhost:8080/image/%s", files[i].getName())));
+            }
+        }
+        return latestImages;
     }
 
     public byte[] getImage(String filename) {

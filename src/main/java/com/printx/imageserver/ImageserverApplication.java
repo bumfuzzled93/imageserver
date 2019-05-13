@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ImageserverApplication {
 
     public static void main(String[] args) {
+        System.out.println( java.lang.System.currentTimeMillis() );
+
         SpringApplication.run(ImageserverApplication.class, args);
     }
 
