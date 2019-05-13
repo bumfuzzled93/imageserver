@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,5 +53,19 @@ public class ImageService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Image> getLatestImages(int num) {
+        List<Image> latestImages = new ArrayList<>();
+
+        File dir = new File(photofolder);
+        File[] files = dir.listFiles();
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
+
+        for(int i=0; i< num; i++){
+            latestImages.add(new Image(String.format("http://localhost:8080/image/%s", files[i].getName())));
+        }
+
+        return latestImages;
     }
 }

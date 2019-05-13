@@ -27,13 +27,20 @@ public class ImageController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = "application/JSON")
-    public ResponseEntity<String> getImages(@RequestParam("timestamp") Optional<Long> timestamp) {
+    public ResponseEntity<String> getImages(@RequestParam(value = "timestamp", required = false) Optional<Long> timestamp) {
         List<Image> images = null;
         if(timestamp.isPresent()){
             images = imageService.getImages(timestamp.get());
         }else {
             images = imageService.getImages();
         }
+        return new ResponseEntity(images, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/latestImage", method = RequestMethod.GET, produces = "application/JSON")
+    public ResponseEntity<String> getLatestImages(@RequestParam(value = "num") Integer num) {
+        List<Image> images = imageService.getLatestImages(num);
         return new ResponseEntity(images, HttpStatus.OK);
     }
 }
